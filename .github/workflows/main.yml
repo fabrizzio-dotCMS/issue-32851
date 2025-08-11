@@ -132,6 +132,8 @@ jobs:
       - name: Run dotCMS CLI
         id: dot-push
         run: |
+          set -e  # Fail on any error
+          
           chmod +x ./.github/workflows/scripts/run-push.sh
           source ./.github/workflows/scripts/run-push.sh
           
