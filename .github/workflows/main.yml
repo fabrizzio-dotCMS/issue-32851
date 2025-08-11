@@ -42,7 +42,7 @@ jobs:
       DOT_CREATE_WORKSPACE: ${{ vars.DOT_CREATE_WORKSPACE || 'true' }}
       # This is the CLI version to use, but we can always override this value
       DOT_CLI_JAR_DOWNLOAD_URL: ${{ vars.DOT_CLI_JAR_DOWNLOAD_URL || needs.dotcli-runner.outputs.url }}
-      # NEW: Support for version number only
+      # Support for version number only
       DOT_CLI_VERSION: ${{ vars.DOT_CLI_VERSION }}
       # In case we want to force the download of the CLI jar
       DOT_FORCE_DOWNLOAD: ${{ vars.DOT_FORCE_DOWNLOAD || 'false' }}
