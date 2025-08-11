@@ -61,12 +61,7 @@ jobs:
 
       - name: Get changes
         run: |
-          if git cat-file -e "${{ github.event.before }}^{commit}"; then
-          git diff --name-only "${{ github.event.before }}" "${{ github.event.after }}" > changed_files.txt
-          else
-          echo "Previous commit not found. Using fallback diff from HEAD^."
-          git diff --name-only HEAD^ HEAD > changed_files.txt
-          fi
+          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changed_files.txt 2>/dev/null || echo -n "" > changed_files.txt
 
       - name: List changed files
         run: |
