@@ -80,7 +80,28 @@ jobs:
 
       - name: Get changes
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.event.after }} > changed_files.txt 2>/dev/null || echo -n "" > changed_files.txt
+          echo "::group::Detecting changed files"
+    
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.event.after }}"
+          
+          echo "Before: $BEFORE"
+          echo "After: $AFTER"
+          
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+          echo "::notice::First push - all files considered changed"
+          git ls-tree --name-only -r HEAD > changed_files.txt
+          elif git cat-file -e "$BEFORE" 2>/dev/null && git cat-file -e "$AFTER" 2>/dev/null; then
+          echo "::notice::Normal diff between valid commits"
+          git diff --name-only "$BEFORE" "$AFTER" > changed_files.txt
+          else
+          echo "::warning::One or both commits not accessible, falling back to current commit files"
+          git ls-tree --name-only -r HEAD > changed_files.txt
+          fi
+          
+          FILE_COUNT=$(wc -l < changed_files.txt)
+          echo "::notice::Files detected: $FILE_COUNT"
+          echo "::endgroup::"
 
       - name: List changed files
         run: |
